@@ -7,7 +7,7 @@
 // `;
 // searchContainer.insertAdjacentHTML('beforeend', searchHTML);
 
-// const galleryContainer = document.querySelector('#gallery');
+
 // const galleryHTML = `
 // <div class="card">
 //   <div class="card-img-container">
@@ -49,15 +49,49 @@
 
 fetch('https://randomuser.me/api/?results=12')
   .then(response => response.json())
-  .then(data => userInfo(data))
+  .then(data => {
+    renderUser(data.results)
+    showModal(data.results)
+  });
 
-  function userInfo(data) {
-    for(let i = 0; i < data.results.length; i++){
-      const users = data.results[i];
-      const userFirstName = data.results[i].name.first
-      const userLastName = data.results[i].name.last
-      const userImage = data.results[i].picture.large
-      const userEmail = data.results[i].userEmail
-      const userCity = data.results[i].location.city
-    }
+function renderUser(users) {
+  let userHTML = '';
+  console.log(users);
+
+  for(let i = 0; i < users.length; i++){
+    let htmlObject = `
+      <div class="card">
+        <div class="card-img-container">
+          <img class="card-img" src="${users[i].picture.large}" alt="profile picture">
+        </div>
+      <div class="card-info-container">
+        <h3 id="name" class="card-name cap">${users[i].name.first} ${users[i].name.last}</h3>
+        <p class="card-text">${users[i].email}</p>
+        <p class="card-text cap">${users[i].location.city} ${users[i].location.state}</p>
+      </div>
+    </div>
+    `
+    userHTML += htmlObject;
   }
+  const galleryContainer = document.querySelector('#gallery');
+  galleryContainer.insertAdjacentHTML('beforeend', userHTML);
+}
+
+
+let htmlObject = `
+  <div class="modal-container">
+    <div class="modal">
+      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+      <div class="modal-info-container">
+        <img class="modal-img" src="${users[i].picture.large}" alt="profile picture">
+        <h3 id="name" class="modal-name cap">${users[i].name.first} ${users[i].name.last}</h3>
+        <p class="modal-text">${users[i].email}</p>
+        <p class="modal-text cap">${users[i].location.city}</p>
+        <hr>
+        <p class="modal-text">${users[i].phone}</p>
+        <p class="modal-text">${users[i].location.street.number} ${users[i].location.street.name}, ${users[i].location.city}, ${users[i].location.state} ${users[i].location.postcode}</p>
+        <p class="modal-text">Birthday: ${users[i].dob.date}.</p>
+      </div>
+    </div>
+  </div>
+`
