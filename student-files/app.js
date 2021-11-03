@@ -51,6 +51,20 @@ function handleModal(users){
 
 function showModal(users, index){
   const user = users[index];
+  const dob = new Date(user.dob.date);
+  const dobMonth = dob.getMonth() + 1;
+  const dobDay = dob.getDate();
+
+  const newDob = `${pad(dobMonth, 10)}/${pad(dobDay, 10)}/${dob.getFullYear()}`;
+  
+  function pad(num, size) {
+    if(num < size) num = "0" + num;
+    return num;
+  }
+
+  const cell = user.cell.replace(/\D/g, '');
+  const newCell = `(${cell.substr(0,3)}) ${cell.substr(4,3)}-${cell.substr(6,4)}`;
+
   let htmlObject = `
     <div class="modal-container">
       <div class="modal">
@@ -61,9 +75,9 @@ function showModal(users, index){
           <p class="modal-text">${user.email}</p>
           <p class="modal-text cap">${user.location.city}</p>
           <hr>
-          <p class="modal-text">${user.cell}</p>
+          <p class="modal-text">${newCell}</p>
           <p class="modal-text">${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode}</p>
-          <p class="modal-text">Birthday: ${user.dob.date}.</p>
+          <p class="modal-text">Birthday: ${newDob}.</p>
         </div>
       </div>
       <div class="modal-btn-container">
