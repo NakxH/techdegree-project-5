@@ -16,7 +16,7 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: white;
 }
 
 header {
@@ -29,9 +29,9 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
+    font-size: 1.8em;
     color: rgba(50, 50, 50, 0.9);
-    margin-top: 35px;
+    margin-top: 0.8em;
 }
 
 .search-input {
@@ -87,7 +87,7 @@ header h1 {
     padding: 10px;
     background: rgba(245, 245, 245, 0.9);
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.397);
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -95,7 +95,7 @@ header h1 {
 .card-img {
     width: 95px;
     margin: 10px 15px auto 10px;
-    border-radius: 50%;
+    border-radius: 10px;
 }
 
 .card-info-container {
@@ -121,6 +121,14 @@ header h1 {
 /* ===================================== 
    Modal
 ======================================== */
+@keyframes modalFade {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
 
 .modal-container {
     position: fixed;
@@ -129,6 +137,8 @@ header h1 {
     bottom: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.7);
+    animation-name: modalFade;
+    animation-duration: .6s;
 }
 
 .modal {

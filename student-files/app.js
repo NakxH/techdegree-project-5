@@ -1,22 +1,29 @@
-const searchContainer = document.querySelector('.search-container');
-const searchHTML = `
-<form action="#" method="get">
-  <input type="search" id="search-input" class="search-input" placeholder="Search...">
-  <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-</form>
-`;
-searchContainer.insertAdjacentHTML('beforeend', searchHTML);
 
-fetch('https://randomuser.me/api/?results=12&nat=gb')
-  .then(response => response.json())
-  .then(data => {
-    renderUser(data.results)
-    handleModal(data.results)
-  });
+function renderSearch(){
+  const searchContainer = document.querySelector('.search-container');
+  const searchHTML = `
+  <form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+  </form>
+  `;
+  searchContainer.insertAdjacentHTML('beforeend', searchHTML);
+}
+
+function getEmployees(){
+  fetch('https://randomuser.me/api/?results=12&nat=gb')
+    .then(response => response.json())
+    .then(data => {
+      renderUser(data.results);
+      handleModal(data.results);
+      handleSearch(data.results);
+    });
+};
 
 function renderUser(users) {
+  const galleryContainer = document.querySelector('#gallery');
+  galleryContainer.innerHTML = '';
   let userHTML = '';
-  console.log(users);
 
   for(let i = 0; i < users.length; i++){
     let htmlObject = `
@@ -30,17 +37,17 @@ function renderUser(users) {
           <p class="card-text cap">${users[i].location.city} ${users[i].location.state}</p>
         </div>
       </div>
-    `
+    `;
     userHTML += htmlObject;
-  }
-  const galleryContainer = document.querySelector('#gallery');
+  };
+  
   galleryContainer.insertAdjacentHTML('beforeend', userHTML);
-}
+};
 
 function handleModal(users){
   const cards = document.querySelectorAll('.card');
-  Array.from(cards).forEach((card, index) => card.addEventListener('click', () => showModal(users, index)))
-}
+  Array.from(cards).forEach((card, index) => card.addEventListener('click', () => showModal(users, index)));
+};
 
 function showModal(users, index){
   const user = users[index];
@@ -66,9 +73,9 @@ function showModal(users, index){
     </div>
   `;
 
-  document.body.insertAdjacentHTML('beforeend', htmlObject)
+  document.body.insertAdjacentHTML('beforeend', htmlObject);
   const closeButton = document.querySelector('#modal-close-btn');
-  const container = document.querySelector('.modal-container')
+  const container = document.querySelector('.modal-container');
   closeButton.addEventListener('click', () => {
     container.remove();
   });
@@ -79,18 +86,34 @@ function showModal(users, index){
   prev.addEventListener('click', () => {
     if(index > 0){
       container.remove();
-      showModal(users, index-1)
+      showModal(users, index-1);
     }
   });
 
   next.addEventListener('click', () => {
     if(index < users.length-1){
       container.remove();
-      showModal(users, index+1)
+      showModal(users, index+1);
     }
   });
-}
+};
 
-const searchInput = document.querySelector('#search-input');
-const searchSubmit = document.querySelector('#search-submit');
+function handleSearch(users) {
+  const searchButton = document.querySelector('.search-submit');
+  const searchItem = document.querySelector('#search-input');
+  const search = (e) => {
+    e.preventDefault();
+    const filteredUsers = users.filter(user => {
+      const fullName = `${user.name.first} ${user.name.last}`;
+      return fullName.toLowerCase().includes(searchItem.value.toLowerCase());
+    });
+    renderUser(filteredUsers);
+    handleModal(filteredUsers);
+  };
+  searchItem.addEventListener('search', search);
+  searchItem.addEventListener('keyup', search);
+  searchButton.addEventListener('click', search);
+};
 
+renderSearch();
+getEmployees();
