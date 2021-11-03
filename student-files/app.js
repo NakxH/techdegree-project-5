@@ -38,7 +38,7 @@ function renderUser(users) {
 }
 
 function handleModal(users){
-  const  cards = document.querySelectorAll('.card');
+  const cards = document.querySelectorAll('.card');
   Array.from(cards).forEach((card, index) => card.addEventListener('click', () => showModal(users, index)))
 }
 
@@ -90,3 +90,7 @@ function showModal(users, index){
     }
   });
 }
+
+const searchInput = document.querySelector('#search-input');
+const searchSubmit = document.querySelector('#search-submit');
+
